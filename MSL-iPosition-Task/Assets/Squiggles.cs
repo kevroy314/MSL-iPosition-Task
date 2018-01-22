@@ -3,21 +3,17 @@ using System.Collections.Generic;
 
 public class Squiggles : MonoBehaviour
 {
+    // For stimuli generation
     public Transform prefab;
     public Material stimuliMaterial;
+
+    // For "top" generation
     public Vector2 xRange;
     public Vector2 yRange;
-    public int randomSeed = 42;
-    public int numItems;
-    private int numberOfStimuli = 150;
-    public float topTestLocationProportion = 0.1f;
-    public Texture2D[] activeTextures;
 
-    void Start()
-    {
-        UnityEngine.Random.seed = randomSeed;
-        // RandomizeLocationsAndStimuli();
-    }
+    // For random generation
+    public int numItems = 6;
+    private int numberOfStimuli = 150;
 
     private GameObject[] getParentChildren()
     {
@@ -53,8 +49,6 @@ public class Squiggles : MonoBehaviour
         for (int i = 0; i < children.Length; i++)
             DestroyImmediate(children[i]);
 
-        activeTextures = stimuliTextures;
-
         // Make new objects
         for (var i = 0; i < stimuliTextures.Length; i++)
         {
@@ -70,10 +64,30 @@ public class Squiggles : MonoBehaviour
         }
     }
 
-    public void StimuliToTop()
+    public Vector3[] StimuliToTop(float horizontalPadding, float verticalPadding)
     {
         GameObject[] children = getParentChildren();
+        Vector3[] topPositions = new Vector3[children.Length];
         for (int i = 0; i < children.Length; i++)
-            children[i].transform.localPosition = new Vector3(Mathf.Lerp(xRange[0], xRange[1], (float)i / (float)children.Length), yRange[1] - (yRange[1] - yRange[0]) * topTestLocationProportion, 0);
+        {
+            float x = Mathf.Lerp(xRange[0] + horizontalPadding, xRange[1] - horizontalPadding, (float)i / (float)(children.Length-1));
+            float y = yRange[1] - verticalPadding;
+            children[i].transform.localPosition = new Vector3(x, y, 0);
+            topPositions[i] = children[i].transform.localPosition;
+        }
+
+        return topPositions;
+    }
+
+    public bool AllStimuliHaveMoved(Vector3[] topPositions)
+    {
+        GameObject[] children = getParentChildren();
+
+        bool match = false;
+
+        for(int i = 0; i < topPositions.Length; i++)
+            match |= children[i].transform.localPosition == topPositions[i];
+
+        return !match;
     }
 }

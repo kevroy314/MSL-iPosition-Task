@@ -20,26 +20,40 @@ public class StateManager : MonoBehaviour {
     public int numberOfTrials;
     private int currentTrialNumber;
 
-	// Use this for initialization
-	void Start () {
+    private bool firstUpdate;
+
+    private Vector3[] topPositions;
+
+    // Use this for initialization
+    void Start () {
         currentState = State.Study;
         startTime = Time.time;
         touchLayer.enabled = false;
         currentTrialNumber = 0;
 
+        firstUpdate = true;
+    }
+
+    private void Init()
+    {
         studyTime = (float)configuration.StudyTimeInMilliseconds / 1000f;
         delayTime = (float)configuration.DelayTimeInMilliseconds / 1000f;
         numberOfTrials = configuration.GetNumberOfTrials();
 
         stimuliManager.SetStimuliAndPositions(
-            configuration.GetStimuliTextures(currentTrialNumber), 
+            configuration.GetStimuliTextures(currentTrialNumber),
             configuration.GetStimuliPositions(currentTrialNumber),
             new Vector2(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels)
             );
     }
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update () {
+        if (firstUpdate)
+        { // To avoid race conditions with the ConfigurationLoader Start() function, we perform the last of the config on the first update
+            Init();
+            firstUpdate = false;
+        }
 		if (currentState == State.Study)
         {
             if (Time.time - startTime >= studyTime)
@@ -55,14 +69,14 @@ public class StateManager : MonoBehaviour {
             {
                 stimuliManager.gameObject.SetActive(true);
                 touchLayer.enabled = true;
-                stimuliManager.StimuliToTop();
+                topPositions = stimuliManager.StimuliToTop(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels);
                 currentState = State.Test;
                 startTime = Time.time;
             }
         }
         else if (currentState == State.Test)
         {
-            if (Input.GetKeyUp(advanceKey))
+            if (Input.GetKeyUp(advanceKey) && stimuliManager.AllStimuliHaveMoved(topPositions))
             {
                 numberOfTrials -= 1;
                 startTime = Time.time;
