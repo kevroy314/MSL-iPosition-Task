@@ -6,6 +6,7 @@ using UnityEngine;
 public class StateManager : MonoBehaviour {
     public Squiggles stimuliManager;
     public StandardLayer touchLayer;
+    public ConfigurationLoader configuration;
 
     public enum State { Study, Delay, Test, Finished };
 
@@ -17,12 +18,24 @@ public class StateManager : MonoBehaviour {
 
     public KeyCode advanceKey;
     public int numberOfTrials;
+    private int currentTrialNumber;
 
 	// Use this for initialization
 	void Start () {
         currentState = State.Study;
         startTime = Time.time;
         touchLayer.enabled = false;
+        currentTrialNumber = 0;
+
+        studyTime = (float)configuration.StudyTimeInMilliseconds / 1000f;
+        delayTime = (float)configuration.DelayTimeInMilliseconds / 1000f;
+        numberOfTrials = configuration.GetNumberOfTrials();
+
+        stimuliManager.SetStimuliAndPositions(
+            configuration.GetStimuliTextures(currentTrialNumber), 
+            configuration.GetStimuliPositions(currentTrialNumber),
+            new Vector2(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels)
+            );
     }
 	
 	// Update is called once per frame
@@ -56,12 +69,18 @@ public class StateManager : MonoBehaviour {
                 touchLayer.enabled = false;
                 if (numberOfTrials <= 0)
                 {
+                    stimuliManager.gameObject.SetActive(false);
                     currentState = State.Finished;
                 }
                 else
                 {
                     currentState = State.Study;
-                    stimuliManager.RandomizeLocationsAndStimuli();
+                    currentTrialNumber++;
+                    stimuliManager.SetStimuliAndPositions(
+                        configuration.GetStimuliTextures(currentTrialNumber), 
+                        configuration.GetStimuliPositions(currentTrialNumber),
+                        new Vector2(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels)
+                        );
                 }
             }
         }

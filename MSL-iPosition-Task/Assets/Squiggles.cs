@@ -11,12 +11,12 @@ public class Squiggles : MonoBehaviour
     public int numItems;
     private int numberOfStimuli = 150;
     public float topTestLocationProportion = 0.1f;
+    public Texture2D[] activeTextures;
 
     void Start()
     {
         UnityEngine.Random.seed = randomSeed;
-
-        RandomizeLocationsAndStimuli();
+        // RandomizeLocationsAndStimuli();
     }
 
     private GameObject[] getParentChildren()
@@ -43,6 +43,30 @@ public class Squiggles : MonoBehaviour
             obj.GetComponent<MeshRenderer>().material = stimuliMaterial;
             obj.GetComponent<MeshRenderer>().material.mainTexture = tex;
             obj.localPosition = new Vector3(Random.Range(xRange[0], xRange[1]), Random.Range(yRange[0], yRange[1]), 0);
+        }
+    }
+
+    public void SetStimuliAndPositions(Texture2D[] stimuliTextures, Vector2[] stimuliPositions, Vector2 itemSize)
+    {
+        // Destroy old objects (if they exist)
+        GameObject[] children = getParentChildren();
+        for (int i = 0; i < children.Length; i++)
+            DestroyImmediate(children[i]);
+
+        activeTextures = stimuliTextures;
+
+        // Make new objects
+        for (var i = 0; i < stimuliTextures.Length; i++)
+        {
+            prefab.localScale = new Vector3(itemSize.x, 0, itemSize.y);
+            var tex = stimuliTextures[i];
+            var obj = Instantiate(prefab) as Transform;
+            obj.SetParent(transform);
+            obj.GetComponent<MeshRenderer>().material = stimuliMaterial;
+            obj.GetComponent<MeshRenderer>().material.mainTexture = tex;
+            obj.localPosition = new Vector3(stimuliPositions[i].x, stimuliPositions[i].y, 0f);
+            Debug.Log(obj.localScale);
+            Debug.Log(obj.localPosition);
         }
     }
 
