@@ -20,6 +20,9 @@ public class ConfigurationLoader : MonoBehaviour {
     private int itemXSizeInPixels;
     private int itemYSizeInPixels;
     private string stimuliFolder;
+    private string logFolder;
+    private string pid;
+    private int mostItemsInTrial;
 
     // Accessors for Global variables
     public int StudyTimeInMilliseconds { get { return studyTimeInMilliseconds; } }
@@ -27,9 +30,16 @@ public class ConfigurationLoader : MonoBehaviour {
     public int ItemXSizeInPixels { get { return itemXSizeInPixels; } }
     public int ItemYSizeInPixels { get { return itemYSizeInPixels; } }
     public string StimuliFolder { get { return stimuliFolder; } }
-    
+    public string LogFolder { get { return logFolder; } }
+    public string ParticipantID { get { return pid; } }
+    public int MostItemsInTrial { get { return mostItemsInTrial; } }
+
     // Use this for initialization
     void Start () {
+        pid = PlayerPrefs.GetString("pid").Trim();
+
+        mostItemsInTrial = 0;
+
         // Open the INI file
         INIParser ini = new INIParser();
 
@@ -46,6 +56,7 @@ public class ConfigurationLoader : MonoBehaviour {
         itemXSizeInPixels = (int)ini.ReadValue("Global", "ItemXSizeInPixels", 50);
         itemYSizeInPixels = (int)ini.ReadValue("Global", "ItemYSizeInPixels", 50);
         stimuliFolder = ini.ReadValue("Global", "StimuliFolder", Application.dataPath).Trim();
+        logFolder = ini.ReadValue("Global", "LogFolder", Application.dataPath).Trim();
 
         // Read the raw contents and isolate the Trials section (assumed to be at the end of the file)
         string contents = ini.ToString();
@@ -69,6 +80,7 @@ public class ConfigurationLoader : MonoBehaviour {
 
                 // Allocate within-trial variables
                 int numItems = trialSplit.Length / 3;
+                if (numItems > mostItemsInTrial) mostItemsInTrial = numItems;
                 string[] filenames = new string[numItems];
                 Vector2[] positions = new Vector2[numItems];
                 Texture2D[] stimuli = new Texture2D[numItems];

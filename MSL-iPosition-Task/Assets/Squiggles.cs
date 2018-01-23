@@ -90,4 +90,16 @@ public class Squiggles : MonoBehaviour
 
         return !match;
     }
+
+    public Vector2[] GetStimuliPositions()
+    {
+        GameObject[] children = getParentChildren();
+        Vector2[] positions = new Vector2[children.Length];
+        for (int i = 0; i < children.Length; i++)
+        {
+            positions[i] = new Vector2(children[i].transform.localPosition.x, children[i].transform.localPosition.y);
+        }
+
+        return positions;
+    }
 }

@@ -1,5 +1,6 @@
 WindowsStandalone
 SceneListBegin?
+Assets/Loader.unity
 Assets/Main.unity
 SceneListEnd?
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.Behaviors.Cursors.UI.TextureSwitch
@@ -90,6 +91,7 @@ f61c0793411f10cf5fbfa1473fef5ef2 UnityEngine.UI.dll:UnityEngine.UI.ToggleGroup
 dac154b38532fd5a92a95b0a9a386115 Assembly-CSharp.dll:TouchScript.Behaviors.Cursors.ObjectCursor
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.Examples.Multiuser.Logo
 03fd9fb453aaf08fa0b51d0e62cff2f4 Assembly-CSharp.dll:.Highlight
+93ffef17fb6ae3a84f457a502b9c45b1 Assembly-CSharp.dll:.QuitOnButton
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationPlayableAsset
 970a95104359198fe1a98ef48655de8c UnityEngine.Timeline.dll:UnityEngine.Timeline.ActivationTrack
 8144169769d51429c4aedc8b0f92d47b UnityEngine.Timeline.dll:UnityEngine.Timeline.AnimationPlayableAsset
@@ -149,6 +151,7 @@ a2398cab0afec05bd8b6b70c007a516c Assembly-CSharp.dll:TouchScript.Behaviors.Curso
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:.ConfigurationLoader
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.Behaviors.Cursors.PointerCursor
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.Examples.Portal.Vortex
+6c35fba9750d7c013b08f88a0c8eb430 Assembly-CSharp.dll:.BeginTask
 c1fa312bc75f65840a2d531ca0166207 Assembly-CSharp.dll:TouchScript.Examples.Tap.Spawn
 fc1e0f4d8439d9928083474691511a13 UnityEngine.Networking.dll:UnityEngine.Networking.NetworkAnimator
 05524b8f659e7bfe5756d1335fec24ba UnityEngine.Networking.dll:UnityEngine.Networking.NetworkBehaviour
@@ -205,4 +208,3 @@ c41bfe6c15524eba2fa78755eccb29e5 Assembly-CSharp.dll:.Squiggles
 354799ab7253e8d83914c27d4dc65f56 Assembly-CSharp.dll:TouchScript.Examples.Portal.Spawner
 ffcb82fccd9242220f3d88cf27f8bfe3 Assembly-CSharp.dll:TouchScript.Gestures.TransformGestures.PinnedTransformGesture
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.LayerManager
-93ffef17fb6ae3a84f457a502b9c45b1 Assembly-CSharp.dll:.QuitOnButton

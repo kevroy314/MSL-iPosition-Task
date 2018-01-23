@@ -1,0 +1,6 @@
+-75.89259	47.45655	-66.64139	-3.728271	-12.84044	36.08214	-3.589254	-14.78673	21.14377	14.59716	58.51501	-29.00472	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan
+-85.6872	-71.65878	-6.508685	-41.64297	23.06477	-4.992105	44.73934	-68.18324	64.20221	-24.8973	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan
+-75.26066	90.42656	-88.59399	60.41074	-61.485	-71.34281	22.812	-88.40442	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan
+-80.94787	42.08532	-35.07109	43.66509	19.96841	50.61612	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan
+52.0695	37.66194	58.51501	-41.95892	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan
+-66.09795	46.82465	-74.38863	-7.519741	-58.98262	19.3365	40.78358	-22.05371	17.01105	-12.89099	54.84992	-1.20062	35.18482	8.278038	54.3823	40.82149	-28.47393	69.57346	-17.80725	-2.780395	23.82307	-65.97156	20.58767	48.08846	27.14692	79.68405	46.3444	61.99054	59.22274	82.84361	76.84045	67.36176

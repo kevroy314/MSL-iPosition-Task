@@ -1,9 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using TouchScript.Layers;
 using UnityEngine;
 
 public class StateManager : MonoBehaviour {
+
+    public StreamWriter logFile;
+    public StreamWriter actualCoordinatesLogFile;
+
     public Squiggles stimuliManager;
     public StandardLayer touchLayer;
     public ConfigurationLoader configuration;
@@ -45,6 +51,12 @@ public class StateManager : MonoBehaviour {
             configuration.GetStimuliPositions(currentTrialNumber),
             new Vector2(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels)
             );
+
+        string dtString = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_");
+        string logFilename = Path.Combine(configuration.LogFolder, dtString + configuration.ParticipantID + "_position_data_coordinates.txt");
+        logFile = new StreamWriter(logFilename);
+        string actualCoordinatesLogFilename = Path.Combine(configuration.LogFolder, dtString + configuration.ParticipantID + "_actual_coordinates.txt");
+        actualCoordinatesLogFile = new StreamWriter(actualCoordinatesLogFilename);
     }
 
     // Update is called once per frame
@@ -78,6 +90,8 @@ public class StateManager : MonoBehaviour {
         {
             if (Input.GetKeyUp(advanceKey) && stimuliManager.AllStimuliHaveMoved(topPositions))
             {
+                AppendToLog();
+
                 numberOfTrials -= 1;
                 startTime = Time.time;
                 touchLayer.enabled = false;
@@ -85,6 +99,9 @@ public class StateManager : MonoBehaviour {
                 {
                     stimuliManager.gameObject.SetActive(false);
                     currentState = State.Finished;
+
+                    logFile.Close();
+                    actualCoordinatesLogFile.Close();
                 }
                 else
                 {
@@ -99,4 +116,33 @@ public class StateManager : MonoBehaviour {
             }
         }
 	}
+
+    private void AppendToLog()
+    {
+        string dataLine = "";
+        string actualCoordinatesLine = "";
+
+        Vector2[] dataPositions = stimuliManager.GetStimuliPositions();
+        Vector2[] actualPositions = configuration.GetStimuliPositions(currentTrialNumber);
+
+        for(int i = 0; i < configuration.MostItemsInTrial; i++)
+        {
+            if (i < dataPositions.Length)
+            {
+                dataLine += dataPositions[i].x + "\t" + dataPositions[i].y + "\t";
+                actualCoordinatesLine += actualPositions[i].x + "\t" + actualPositions[i].y + "\t";
+            }
+            else
+            {
+                dataLine += "nan\tnan\t";
+                actualCoordinatesLine += "nan\tnan\t";
+            }
+        }
+
+        logFile.WriteLine(dataLine.Trim());
+        actualCoordinatesLogFile.WriteLine(actualCoordinatesLine.Trim());
+
+        logFile.Flush();
+        actualCoordinatesLogFile.Flush();
+    }
 }
