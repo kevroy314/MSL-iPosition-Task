@@ -12,6 +12,16 @@ public class BeginTask : MonoBehaviour {
     {
         if (participantIDInput.text.Trim() == "") return;
         Debug.Log("Loading scene with Participant ID: " + participantIDInput.text.Trim());
+        PlayerPrefs.SetString("config", "configuration.ini");
+        PlayerPrefs.SetString("pid", participantIDInput.text.Trim());
+        SceneManager.LoadScene(1);
+    }
+
+    public void BeginPractice()
+    {
+        if (participantIDInput.text.Trim() == "") return;
+        Debug.Log("Loading scene with Participant ID: " + participantIDInput.text.Trim());
+        PlayerPrefs.SetString("config", "practice_configuration.ini");
         PlayerPrefs.SetString("pid", participantIDInput.text.Trim());
         SceneManager.LoadScene(1);
     }

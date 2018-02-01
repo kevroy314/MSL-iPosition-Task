@@ -9,6 +9,8 @@ public class ForceAspectRatio : MonoBehaviour
     // Use this for initialization
     void Start()
     {
+        Cursor.lockState = CursorLockMode.Confined;
+
         // determine the game window's current aspect ratio
         float windowaspect = (float)Screen.width / (float)Screen.height;
 

@@ -200,6 +200,7 @@ c41bfe6c15524eba2fa78755eccb29e5 Assembly-CSharp.dll:.Squiggles
 60eed870167e94563437af95bcc883f9 Assembly-CSharp.dll:TouchScript.Examples.Portal.Rotator
 4f52fb13c8876d1fc6a0a4110faf10fc Assembly-CSharp.dll:TouchScript.Gestures.TransformGestures.ScreenTransformGesture
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.Core.GestureManagerInstance
+8c46b2905674951b0543bd48c9fbec3d Assembly-CSharp.dll:.ForceAspectRatio
 6ec273a5fcd8b0a1a1b85b7bebb4a14a Assembly-CSharp.dll:TouchScript.Layers.UI.TouchScriptInputModule
 25cb51b79761cf69e146997ca3f33ce1 Assembly-CSharp.dll:TouchScript.Behaviors.Cursors.MouseCursor
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.Behaviors.UI.OverHelper
@@ -208,4 +209,3 @@ c41bfe6c15524eba2fa78755eccb29e5 Assembly-CSharp.dll:.Squiggles
 354799ab7253e8d83914c27d4dc65f56 Assembly-CSharp.dll:TouchScript.Examples.Portal.Spawner
 ffcb82fccd9242220f3d88cf27f8bfe3 Assembly-CSharp.dll:TouchScript.Gestures.TransformGestures.PinnedTransformGesture
 05524b8f659e7bfe5756d1335fec24ba Assembly-CSharp.dll:TouchScript.LayerManager
-8c46b2905674951b0543bd48c9fbec3d Assembly-CSharp.dll:.ForceAspectRatio

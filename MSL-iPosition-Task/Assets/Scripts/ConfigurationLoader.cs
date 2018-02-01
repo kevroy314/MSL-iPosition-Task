@@ -12,11 +12,11 @@ public class ConfigurationLoader : MonoBehaviour {
     private string[][] trialFilenames;
     private Vector2[][] trialPositions;
     private Texture2D[][] trialStimuli;
+    private int[] trialStudyTimeInMilliseconds;
+    private int[] trialDelayTimeInMilliseconds;
     private int numTrials;
 
     // Internal Global config data
-    private int studyTimeInMilliseconds;
-    private int delayTimeInMilliseconds;
     private int itemXSizeInPixels;
     private int itemYSizeInPixels;
     private string stimuliFolder;
@@ -25,8 +25,6 @@ public class ConfigurationLoader : MonoBehaviour {
     private int mostItemsInTrial;
 
     // Accessors for Global variables
-    public int StudyTimeInMilliseconds { get { return studyTimeInMilliseconds; } }
-    public int DelayTimeInMilliseconds { get { return delayTimeInMilliseconds; } }
     public int ItemXSizeInPixels { get { return itemXSizeInPixels; } }
     public int ItemYSizeInPixels { get { return itemYSizeInPixels; } }
     public string StimuliFolder { get { return stimuliFolder; } }
@@ -37,7 +35,8 @@ public class ConfigurationLoader : MonoBehaviour {
     // Use this for initialization
     void Start () {
         pid = PlayerPrefs.GetString("pid").Trim();
-
+        configFile = PlayerPrefs.GetString("config", "configuration.ini").Trim();
+        Debug.Log(configFile);
         mostItemsInTrial = 0;
 
         // Open the INI file
@@ -51,8 +50,6 @@ public class ConfigurationLoader : MonoBehaviour {
         ini.Open(configFilePath);
 
         // Read the global configuration variables
-        studyTimeInMilliseconds = (int)ini.ReadValue("Global", "StudyTimeInMilliseconds", 15000);
-        delayTimeInMilliseconds = (int)ini.ReadValue("Global", "DelayTimeInMilliseconds", 5000);
         itemXSizeInPixels = (int)ini.ReadValue("Global", "ItemXSizeInPixels", 50);
         itemYSizeInPixels = (int)ini.ReadValue("Global", "ItemYSizeInPixels", 50);
         stimuliFolder = ini.ReadValue("Global", "StimuliFolder", Application.dataPath).Trim();
@@ -68,6 +65,8 @@ public class ConfigurationLoader : MonoBehaviour {
         List<string[]> trialFilenamesTmp = new List<string[]>();
         List<Vector2[]> trialPositionsTmp = new List<Vector2[]>();
         List<Texture2D[]> trialStimuliTmp = new List<Texture2D[]>();
+        List<int> trialStudyTimesTmp = new List<int>();
+        List<int> trialDelayTimesTmp = new List<int>();
 
         // Parse each trial, skipping any that fail (i.e. that row in the jagged arrays defined above will be null)
         for (int i = 0; i < trialStrings.Length; i++)
@@ -76,10 +75,11 @@ public class ConfigurationLoader : MonoBehaviour {
             {
                 if (trialStrings[i].Trim()[0] == ';') continue; // Check for comment lines
                 string[] trialSplit = trialStrings[i].Trim().Split(new char[] { ' ' });
-                if (trialSplit.Length % 3 != 0) continue; // Skip lines that don't have a multiple of 3 elements (filename, x, y)
+                if (trialSplit.Length < 5) continue; //Skip lines that don't have at least one valid item plus the times
+                if ((trialSplit.Length - 2) % 3 != 0) continue; // Skip lines that don't have a multiple of 3 elements (filename, x, y)
 
                 // Allocate within-trial variables
-                int numItems = trialSplit.Length / 3;
+                int numItems = (trialSplit.Length - 2) / 3;
                 if (numItems > mostItemsInTrial) mostItemsInTrial = numItems;
                 string[] filenames = new string[numItems];
                 Vector2[] positions = new Vector2[numItems];
@@ -88,13 +88,15 @@ public class ConfigurationLoader : MonoBehaviour {
                 // Parse the items
                 for (int j = 0; j < numItems; j++)
                 {
-                    filenames[j] = Path.Combine(stimuliFolder, trialSplit[j].Trim());
-                    positions[j] = new Vector2(float.Parse(trialSplit[j * 2 + numItems].Trim()), float.Parse(trialSplit[j * 2 + numItems + 1].Trim()));
+                    filenames[j] = Path.Combine(stimuliFolder, trialSplit[j+2].Trim());
+                    positions[j] = new Vector2(float.Parse(trialSplit[j * 2 + numItems + 2].Trim()), float.Parse(trialSplit[j * 2 + numItems + 3].Trim()));
                     stimuli[j] = LoadTexture(filenames[j]);
                     if (stimuli[j] == null) continue;
                 }
 
                 // Store the values in the trial tables
+                trialStudyTimesTmp.Add(int.Parse(trialSplit[0]));
+                trialDelayTimesTmp.Add(int.Parse(trialSplit[1]));
                 trialFilenamesTmp.Add(filenames);
                 trialPositionsTmp.Add(positions);
                 trialStimuliTmp.Add(stimuli);
@@ -102,11 +104,13 @@ public class ConfigurationLoader : MonoBehaviour {
                 numTrials++;
             }
             catch (System.Exception) { continue; } // If anything goes weird, just skip the line
-
-            trialFilenames = trialFilenamesTmp.ToArray();
-            trialPositions = trialPositionsTmp.ToArray();
-            trialStimuli = trialStimuliTmp.ToArray();
         }
+
+        trialStudyTimeInMilliseconds = trialStudyTimesTmp.ToArray();
+        trialDelayTimeInMilliseconds = trialDelayTimesTmp.ToArray();
+        trialFilenames = trialFilenamesTmp.ToArray();
+        trialPositions = trialPositionsTmp.ToArray();
+        trialStimuli = trialStimuliTmp.ToArray();
     }
 
     // Accessors for trial-by-trial data
@@ -138,6 +142,18 @@ public class ConfigurationLoader : MonoBehaviour {
     public int GetNumberOfTrials()
     {
         return numTrials;
+    }
+
+    public int GetTrialStudyTime(int trialNum)
+    {
+        if (trialNum >= numTrials) return -1;
+        return trialStudyTimeInMilliseconds[trialNum];
+    }
+
+    public int GetTrialDelayTime(int trialNum)
+    {
+        if (trialNum >= numTrials) return -1;
+        return trialDelayTimeInMilliseconds[trialNum];
     }
 
     // Helper function for loading textures

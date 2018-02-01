@@ -1,0 +1,2 @@
+-59	-63	1	67	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan
+-48	53	-41	-6	-80	-18	41	-15	-45	-81	72	-38	nan	nan	nan	nan	nan	nan	nan	nan

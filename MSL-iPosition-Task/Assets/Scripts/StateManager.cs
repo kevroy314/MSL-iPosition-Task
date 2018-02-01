@@ -42,8 +42,6 @@ public class StateManager : MonoBehaviour {
 
     private void Init()
     {
-        studyTime = (float)configuration.StudyTimeInMilliseconds / 1000f;
-        delayTime = (float)configuration.DelayTimeInMilliseconds / 1000f;
         numberOfTrials = configuration.GetNumberOfTrials();
 
         stimuliManager.SetStimuliAndPositions(
@@ -53,10 +51,15 @@ public class StateManager : MonoBehaviour {
             );
 
         string dtString = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_");
+        if (PlayerPrefs.GetString("config").ToLower().Contains("practice"))
+            dtString += "practice_";
         string logFilename = Path.Combine(configuration.LogFolder, dtString + configuration.ParticipantID + "_position_data_coordinates.txt");
         logFile = new StreamWriter(logFilename);
         string actualCoordinatesLogFilename = Path.Combine(configuration.LogFolder, dtString + configuration.ParticipantID + "_actual_coordinates.txt");
         actualCoordinatesLogFile = new StreamWriter(actualCoordinatesLogFilename);
+
+        studyTime = (float)configuration.GetTrialStudyTime(0) / 1000f;
+        delayTime = (float)configuration.GetTrialDelayTime(0) / 1000f;
     }
 
     // Update is called once per frame
@@ -112,6 +115,8 @@ public class StateManager : MonoBehaviour {
                         configuration.GetStimuliPositions(currentTrialNumber),
                         new Vector2(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels)
                         );
+                    studyTime = (float)configuration.GetTrialStudyTime(currentTrialNumber) / 1000f;
+                    delayTime = (float)configuration.GetTrialDelayTime(currentTrialNumber) / 1000f;
                 }
             }
         }
