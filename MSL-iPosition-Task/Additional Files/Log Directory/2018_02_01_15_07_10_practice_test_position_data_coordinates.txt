@@ -1,2 +1,0 @@
--37.77777	-42.03703	12.96296	43.88889	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan	nan
--65	56.48147	-34.66667	67.96296	-5.444446	67.77779	39.88889	66.2963	48.74074	70.18517	79.81482	66.48149	nan	nan	nan	nan	nan	nan	nan	nan

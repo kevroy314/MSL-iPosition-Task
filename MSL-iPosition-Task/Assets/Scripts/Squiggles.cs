@@ -52,7 +52,7 @@ public class Squiggles : MonoBehaviour
         // Make new objects
         for (var i = 0; i < stimuliTextures.Length; i++)
         {
-            prefab.localScale = new Vector3(itemSize.x, 0, itemSize.y);
+            prefab.localScale = new Vector3(-itemSize.x, 0, -itemSize.y);
             var tex = stimuliTextures[i];
             var obj = Instantiate(prefab) as Transform;
             obj.SetParent(transform);
@@ -71,6 +71,8 @@ public class Squiggles : MonoBehaviour
         for (int i = 0; i < children.Length; i++)
         {
             float x = Mathf.Lerp(xRange[0] + horizontalPadding, xRange[1] - horizontalPadding, (float)i / (float)(children.Length-1));
+            if (children.Length <= 1)
+                x = 0f;
             float y = yRange[1] - verticalPadding;
             children[i].transform.localPosition = new Vector3(x, y, 0);
             topPositions[i] = children[i].transform.localPosition;

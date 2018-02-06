@@ -47,7 +47,7 @@ public class StateManager : MonoBehaviour {
         stimuliManager.SetStimuliAndPositions(
             configuration.GetStimuliTextures(currentTrialNumber),
             configuration.GetStimuliPositions(currentTrialNumber),
-            new Vector2(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels)
+            configuration.GetTrialItemSize(currentTrialNumber)
             );
 
         string dtString = DateTime.Now.ToString("yyyy_MM_dd_HH_mm_ss_");
@@ -60,6 +60,8 @@ public class StateManager : MonoBehaviour {
 
         studyTime = (float)configuration.GetTrialStudyTime(0) / 1000f;
         delayTime = (float)configuration.GetTrialDelayTime(0) / 1000f;
+
+        advanceKey = configuration.NextTrialKey;
     }
 
     // Update is called once per frame
@@ -84,16 +86,18 @@ public class StateManager : MonoBehaviour {
             {
                 stimuliManager.gameObject.SetActive(true);
                 touchLayer.enabled = true;
-                topPositions = stimuliManager.StimuliToTop(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels);
+                topPositions = stimuliManager.StimuliToTop(configuration.GetTrialItemSize(currentTrialNumber).x, configuration.GetTrialItemSize(currentTrialNumber).y);
                 currentState = State.Test;
                 startTime = Time.time;
             }
         }
         else if (currentState == State.Test)
         {
-            if (Input.GetKeyUp(advanceKey) && stimuliManager.AllStimuliHaveMoved(topPositions))
+            if ((configuration.GetStimuliLogInstructions(currentTrialNumber) == "skip" && Input.GetKeyUp(advanceKey)) || 
+                (Input.GetKeyUp(advanceKey) && stimuliManager.AllStimuliHaveMoved(topPositions)))
             {
-                AppendToLog();
+                if (configuration.GetStimuliLogInstructions(currentTrialNumber) == "log")
+                    AppendToLog();
 
                 numberOfTrials -= 1;
                 startTime = Time.time;
@@ -113,7 +117,7 @@ public class StateManager : MonoBehaviour {
                     stimuliManager.SetStimuliAndPositions(
                         configuration.GetStimuliTextures(currentTrialNumber), 
                         configuration.GetStimuliPositions(currentTrialNumber),
-                        new Vector2(configuration.ItemXSizeInPixels, configuration.ItemYSizeInPixels)
+                        configuration.GetTrialItemSize(currentTrialNumber)
                         );
                     studyTime = (float)configuration.GetTrialStudyTime(currentTrialNumber) / 1000f;
                     delayTime = (float)configuration.GetTrialDelayTime(currentTrialNumber) / 1000f;
